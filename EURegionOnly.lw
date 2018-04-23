@@ -1,0 +1,13 @@
+# export
+
+
+import Fugue.AWS as AWS
+
+validate euOnlyRegion
+
+fun euOnlyRegion(region: AWS.Region) -> Validation:
+  case region of
+    | AWS.Eu-central-1 -> Validation.success
+    | AWS.Eu-west-1 -> Validation.success
+    | AWS.Eu-west-2 -> Validation.success
+    | _             -> Validation.failure("Invalid Region: Everything must run in EU only regions. GDPR regions include EU-central-1, Eu-west-1 or Eu -west-2 only\n")

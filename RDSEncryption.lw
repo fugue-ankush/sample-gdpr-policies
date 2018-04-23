@@ -1,0 +1,9 @@
+export
+  requireEncryptionForRDS
+
+import Fugue.AWS.RDS as RDS
+
+fun requireEncryptionForRDS(dbInstance: RDS.DBInstance) -> Validation:
+    case dbInstance.(RDS.DBInstance).storageEncrypted of
+      | Optional True -> Validation.success
+      | _             -> Validation.failure("Encryption is required for all RDS Instances. Enable it by adding storageEncrypted: True")

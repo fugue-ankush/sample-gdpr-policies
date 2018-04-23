@@ -1,0 +1,18 @@
+#export
+#  requireEncryptionForEBSVolume
+
+import Fugue.AWS.EC2 as EC2
+
+validate requireEncryptionForEBSVolume
+validate requireVolumesCheck
+
+fun requireEncryptionForEBSVolume(volume: EC2.Volume) -> Validation:
+  case volume.(EC2.Volume).encrypted of
+    | Optional True -> Validation.success
+    | _    -> Validation.failure("Encryption is required for all EC2 Volumes")
+
+fun requireVolumesCheck(instance: EC2.Instance) -> Validation:
+  let ls: instance.(EC2.Instance).volumes ?| []
+  if List.isEmpty(ls) 
+  then Validation.failure ("T3-No Volumes attached to EC2 Instance") 
+  else Validation.success
